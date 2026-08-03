@@ -19,4 +19,14 @@ public class TaskService {
     public List<Task> getAllTasks() {
         return List.copyOf(tasks);
     }
+
+    public Task getTaskById(Long id){
+        for(Task task:tasks){
+            if(task.id().equals(id)){
+                return task;
+            }
+        }
+        return null;
+    }
+
 }
