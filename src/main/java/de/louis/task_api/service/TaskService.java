@@ -49,4 +49,14 @@ public class TaskService {
         return null;
     }
 
+    public Task deleteTask(Long id){
+        for (Task task: tasks){
+            if(task.id().equals(id)){
+                tasks.remove(task);
+                return task;
+            }
+        }
+        return null;
+    }
+
 }
