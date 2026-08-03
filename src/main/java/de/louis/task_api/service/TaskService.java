@@ -37,4 +37,16 @@ public class TaskService {
         return task;
     }
 
+    public Task modifyTask(Long id, String title, boolean completed){
+        for (int i=0; i<tasks.size(); i++){
+            Task task= tasks.get(i);
+            if (task.id().equals(id)){
+                Task updatedTask= new Task(id, title, completed);
+                tasks.set(i, updatedTask);
+                return updatedTask;
+            }
+        }
+        return null;
+    }
+
 }

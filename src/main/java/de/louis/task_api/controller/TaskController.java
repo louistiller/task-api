@@ -1,6 +1,7 @@
 package de.louis.task_api.controller;
 
 import de.louis.task_api.model.CreateTaskRequest;
+import de.louis.task_api.model.ModifyTaskRequest;
 import de.louis.task_api.model.Task;
 import de.louis.task_api.service.TaskService;
 import org.springframework.web.bind.annotation.*;
@@ -29,5 +30,10 @@ public class TaskController {
     @PostMapping
     public Task createTask(@RequestBody CreateTaskRequest request){
         return taskService.createTask(request.title());
+    }
+
+    @PutMapping("/{id}")
+    public Task modifyTask(@PathVariable Long id, @RequestBody ModifyTaskRequest request){
+        return taskService.modifyTask(id, request.title(), request.completed());
     }
 }
