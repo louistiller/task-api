@@ -1,5 +1,6 @@
 package de.louis.task_api.service;
 
+import de.louis.task_api.exception.TaskNotFoundException;
 import de.louis.task_api.model.Task;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +28,7 @@ public class TaskService {
                 return task;
             }
         }
-        return null;
+        throw new TaskNotFoundException(id);
     }
 
     public Task createTask(String title){
@@ -46,7 +47,7 @@ public class TaskService {
                 return updatedTask;
             }
         }
-        return null;
+        throw new TaskNotFoundException(id);
     }
 
     public Task deleteTask(Long id){
@@ -56,7 +57,7 @@ public class TaskService {
                 return task;
             }
         }
-        return null;
+        throw new TaskNotFoundException(id);
     }
 
 }
