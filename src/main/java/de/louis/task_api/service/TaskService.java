@@ -9,6 +9,7 @@ import java.util.List;
 @Service
 public class TaskService {
     private final List<Task> tasks= new ArrayList<>();
+    private long nextId= 4;
 
     public TaskService(){
         tasks.add(new Task(1L, "Spring Boot lernen", false));
@@ -27,6 +28,13 @@ public class TaskService {
             }
         }
         return null;
+    }
+
+    public Task createTask(String title){
+        Task task= new Task(nextId, title, false);
+        nextId++;
+        tasks.add(task);
+        return task;
     }
 
 }

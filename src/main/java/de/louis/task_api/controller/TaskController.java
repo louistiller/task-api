@@ -1,11 +1,9 @@
 package de.louis.task_api.controller;
 
+import de.louis.task_api.model.CreateTaskRequest;
 import de.louis.task_api.model.Task;
 import de.louis.task_api.service.TaskService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,5 +24,10 @@ public class TaskController {
     @GetMapping("/{id}")
     public Task getTaskById(@PathVariable Long id){
         return taskService.getTaskById(id);
+    }
+
+    @PostMapping
+    public Task createTask(@RequestBody CreateTaskRequest request){
+        return taskService.createTask(request.title());
     }
 }
