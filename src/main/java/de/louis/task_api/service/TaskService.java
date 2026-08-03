@@ -2,62 +2,43 @@ package de.louis.task_api.service;
 
 import de.louis.task_api.exception.TaskNotFoundException;
 import de.louis.task_api.model.Task;
+import de.louis.task_api.repository.TaskRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class TaskService {
-    private final List<Task> tasks= new ArrayList<>();
-    private long nextId= 4;
-
-    public TaskService(){
-        tasks.add(new Task(1L, "Spring Boot lernen", false));
-        tasks.add(new Task(2L, "Git üben", true));
-        tasks.add(new Task(3L, "REST verstehen", false));
-    }
+    private final TaskRepository taskRepository;
 
     public List<Task> getAllTasks() {
-        return List.copyOf(tasks);
+        return taskRepository.findAll();
     }
 
     public Task getTaskById(Long id){
-        for(Task task:tasks){
-            if(task.id().equals(id)){
-                return task;
-            }
-        }
-        throw new TaskNotFoundException(id);
+        return taskRepository.findById(id)
+                .orElseThrow(()->new TaskNotFoundException(id));
     }
 
     public Task createTask(String title){
-        Task task= new Task(nextId, title, false);
-        nextId++;
-        tasks.add(task);
-        return task;
+        Task task= new Task(title, false);
+        return taskRepository.save(task);
     }
 
     public Task modifyTask(Long id, String title, boolean completed){
-        for (int i=0; i<tasks.size(); i++){
-            Task task= tasks.get(i);
-            if (task.id().equals(id)){
-                Task updatedTask= new Task(id, title, completed);
-                tasks.set(i, updatedTask);
-                return updatedTask;
-            }
-        }
-        throw new TaskNotFoundException(id);
+        Task task=getTaskById(id);
+        task.setTitle(title);
+        task.setCompleted(completed);
+        return taskRepository.save(task);
     }
 
     public Task deleteTask(Long id){
-        for (Task task: tasks){
-            if(task.id().equals(id)){
-                tasks.remove(task);
-                return task;
-            }
-        }
-        throw new TaskNotFoundException(id);
+        Task task=getTaskById(id);
+        taskRepository.delete(task);
+        return task;
     }
 
 }
