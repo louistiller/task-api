@@ -30,6 +30,21 @@ public class TaskService {
                 .toList();
     }
 
+    public List<TaskResponse> getTasksByCompleted(Boolean completed) {
+
+        List<Task> tasks;
+
+        if (completed == null) {
+            tasks = taskRepository.findAll();
+        } else {
+            tasks = taskRepository.findByCompleted(completed);
+        }
+
+        return tasks.stream()
+                .map(this::toResponse)
+                .toList();
+    }
+
     public TaskResponse getTaskById(Long id){
         return toResponse(taskRepository.findById(id)
                 .orElseThrow(()->new TaskNotFoundException(id)));
