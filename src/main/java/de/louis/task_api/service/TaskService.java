@@ -2,9 +2,12 @@ package de.louis.task_api.service;
 
 import de.louis.task_api.exception.TaskNotFoundException;
 import de.louis.task_api.model.Task;
+import de.louis.task_api.model.TaskPageResponse;
 import de.louis.task_api.model.TaskResponse;
 import de.louis.task_api.repository.TaskRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -30,19 +33,31 @@ public class TaskService {
                 .toList();
     }
 
-    public List<TaskResponse> getTasksByCompleted(Boolean completed) {
+    public TaskPageResponse getTasksByCompleted(Boolean completed, Pageable pageable) {
 
-        List<Task> tasks;
+        Page<Task> taskPage;
 
         if (completed == null) {
-            tasks = taskRepository.findAll();
+            taskPage = taskRepository.findAll(pageable);
         } else {
-            tasks = taskRepository.findByCompleted(completed);
+            taskPage = taskRepository.findByCompleted(completed, pageable);
         }
 
-        return tasks.stream()
+        List<TaskResponse> content = taskPage
+                .getContent()
+                .stream()
                 .map(this::toResponse)
                 .toList();
+
+        return new TaskPageResponse(
+                content,
+                taskPage.getNumber(),
+                taskPage.getSize(),
+                taskPage.getTotalElements(),
+                taskPage.getTotalPages(),
+                taskPage.isFirst(),
+                taskPage.isLast()
+        );
     }
 
     public TaskResponse getTaskById(Long id){

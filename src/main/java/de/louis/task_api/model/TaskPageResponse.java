@@ -1,0 +1,12 @@
+package de.louis.task_api.model;
+
+import java.util.List;
+
+public record TaskPageResponse(List<TaskResponse> content,
+                               int page,
+                               int size,
+                               long totalElements,
+                               int totalPages,
+                               boolean first,
+                               boolean last) {
+}

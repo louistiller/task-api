@@ -1,11 +1,11 @@
 package de.louis.task_api.controller;
 
-import de.louis.task_api.model.CreateTaskRequest;
-import de.louis.task_api.model.ModifyTaskRequest;
-import de.louis.task_api.model.Task;
-import de.louis.task_api.model.TaskResponse;
+import de.louis.task_api.model.*;
 import de.louis.task_api.service.TaskService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,8 +22,8 @@ public class TaskController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskResponse>> getTasks(@RequestParam(required = false) Boolean completed){
-        return ResponseEntity.ok(taskService.getTasksByCompleted(completed));
+    public ResponseEntity<TaskPageResponse> getTasks(@RequestParam(required = false) Boolean completed, @PageableDefault(size=10, sort = "id", direction = Sort.Direction.ASC)Pageable pageable){
+        return ResponseEntity.ok(taskService.getTasksByCompleted(completed, pageable));
     }
 
     @GetMapping("/{id}")
