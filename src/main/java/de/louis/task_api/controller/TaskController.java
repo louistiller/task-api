@@ -4,6 +4,7 @@ import de.louis.task_api.model.CreateTaskRequest;
 import de.louis.task_api.model.ModifyTaskRequest;
 import de.louis.task_api.model.Task;
 import de.louis.task_api.service.TaskService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,12 +29,12 @@ public class TaskController {
     }
 
     @PostMapping
-    public Task createTask(@RequestBody CreateTaskRequest request){
+    public Task createTask(@Valid @RequestBody CreateTaskRequest request){
         return taskService.createTask(request.title());
     }
 
     @PutMapping("/{id}")
-    public Task modifyTask(@PathVariable Long id, @RequestBody ModifyTaskRequest request){
+    public Task modifyTask(@PathVariable Long id, @Valid @RequestBody ModifyTaskRequest request){
         return taskService.modifyTask(id, request.title(), request.completed());
     }
 

@@ -1,4 +1,10 @@
 package de.louis.task_api.model;
 
-public record ModifyTaskRequest(String title, boolean completed) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+public record ModifyTaskRequest(
+        @NotBlank(message = "Title must not be blank")
+        @Size(max = 100, message = "Title must not exceed 100 characters")
+        String title, boolean completed) {
 }
