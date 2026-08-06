@@ -4,21 +4,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 @Entity
-@Getter
+
 
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Setter
+
     private String title;
-    @Setter
+
     private boolean completed;
 
     protected Task(){}
@@ -27,5 +25,34 @@ public class Task {
         this.completed= completed;
     }
 
+    public Long getId() {
+
+        return id;
+
+    }
+
+    public String getTitle() {
+
+        return title;
+
+    }
+
+    public boolean isCompleted() {
+
+        return completed;
+
+    }
+
+    public void setTitle(String title) {
+
+        this.title = title;
+
+    }
+
+    public void setCompleted(boolean completed) {
+
+        this.completed = completed;
+
+    }
 
 }

@@ -5,7 +5,6 @@ import de.louis.task_api.model.Task;
 import de.louis.task_api.model.TaskPageResponse;
 import de.louis.task_api.model.TaskResponse;
 import de.louis.task_api.repository.TaskRepository;
-import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,9 +13,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
 public class TaskService {
     private final TaskRepository taskRepository;
+
+    public TaskService(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
 
     private TaskResponse toResponse(Task task) {
         return new TaskResponse(
