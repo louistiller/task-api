@@ -47,7 +47,13 @@ public class SecurityConfig {
                                 "/error"
                         ).permitAll()
                         .anyRequest().authenticated()
-                );
+                )
+        .logout(logout -> logout
+
+                .logoutUrl("/auth/logout")
+                .logoutSuccessHandler((request, response, authentication) ->
+                        response.setStatus(200)
+                ));
 
         return http.build();
     }
