@@ -1,9 +1,6 @@
 package de.louis.task_api.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -19,10 +16,15 @@ public class Task {
 
     private boolean completed;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id"/*, nullable =false*/)
+    private User user;
+
     protected Task(){}
-    public Task(String title, boolean completed){
+    public Task(String title, boolean completed, User user){
         this.title= title;
         this.completed= completed;
+        this.user=user;
     }
 
     public Long getId() {

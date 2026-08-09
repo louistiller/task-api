@@ -4,6 +4,7 @@ import de.louis.task_api.exception.TaskNotFoundException;
 import de.louis.task_api.model.Task;
 import de.louis.task_api.model.TaskPageResponse;
 import de.louis.task_api.model.TaskResponse;
+import de.louis.task_api.model.User;
 import de.louis.task_api.repository.TaskRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,9 +16,11 @@ import java.util.List;
 @Service
 public class TaskService {
     private final TaskRepository taskRepository;
+    private final UserService userService;
 
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository, UserService userService) {
         this.taskRepository = taskRepository;
+        this.userService= userService;
     }
 
     private TaskResponse toResponse(Task task) {
@@ -35,14 +38,14 @@ public class TaskService {
                 .toList();
     }
 
-    public TaskPageResponse getTasksByCompleted(Boolean completed, Pageable pageable) {
+    public TaskPageResponse getTasksByCompleted(String username, Boolean completed, Pageable pageable) {
 
         Page<Task> taskPage;
 
         if (completed == null) {
-            taskPage = taskRepository.findAll(pageable);
+            taskPage = taskRepository.findByUserUsername(username, pageable);
         } else {
-            taskPage = taskRepository.findByCompleted(completed, pageable);
+            taskPage = taskRepository.findByUserUsernameAndCompleted(username, completed, pageable);
         }
 
         List<TaskResponse> content = taskPage
@@ -62,30 +65,31 @@ public class TaskService {
         );
     }
 
-    public TaskResponse getTaskById(Long id){
-        return toResponse(taskRepository.findById(id)
-                .orElseThrow(()->new TaskNotFoundException(id)));
+    public TaskResponse getTaskById(Long id, String username){
+        return toResponse(findTaskById(id, username));
     }
 
-    public Task findTaskById(Long id){
-        return taskRepository.findById(id)
+    public Task findTaskById(Long id, String username){
+        return taskRepository.findByIdAndUserUsername(id, username)
                 .orElseThrow(()->new TaskNotFoundException(id));
     }
 
-    public TaskResponse createTask(String title){
-        Task task= new Task(title, false);
+    public TaskResponse createTask(String title, String username){
+        User user= userService.findByUsername(username);
+
+        Task task= new Task(title, false, user);
         return toResponse(taskRepository.save(task));
     }
 
-    public TaskResponse modifyTask(Long id, String title, boolean completed){
-        Task task=findTaskById(id);
+    public TaskResponse modifyTask(Long id, String username, String title, boolean completed){
+        Task task=findTaskById(id, username);
         task.setTitle(title);
         task.setCompleted(completed);
         return toResponse(taskRepository.save(task));
     }
 
-    public TaskResponse deleteTask(Long id){
-        Task task= findTaskById(id);
+    public TaskResponse deleteTask(Long id, String username){
+        Task task= findTaskById(id, username);
         taskRepository.delete(task);
         return toResponse(task);
     }

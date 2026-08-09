@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
     /*findAll();
@@ -15,5 +16,7 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     deleteById(id);
     existsById(id);*/
 
-    Page<Task> findByCompleted(boolean completed, Pageable pageable);
+    Page<Task> findByUserUsernameAndCompleted(String username, Boolean completed, Pageable pageable);
+    Page<Task> findByUserUsername(String username, Pageable pageable);
+    Optional<Task> findByIdAndUserUsername(Long id, String username);
 }
