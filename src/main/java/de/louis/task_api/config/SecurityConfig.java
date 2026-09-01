@@ -39,17 +39,16 @@ public class SecurityConfig {
 
         http
                 .cors(cors -> {})
-                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/auth/register",
                                 "/auth/login",
+                                "/csrf",
                                 "/error"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
         .logout(logout -> logout
-
                 .logoutUrl("/auth/logout")
                 .logoutSuccessHandler((request, response, authentication) ->
                         response.setStatus(200)
@@ -64,8 +63,6 @@ public class SecurityConfig {
 
         config.setAllowedOrigins(List.of(
                 "http://localhost:5500",
-                "http://127.0.0.1:5500",
-                "http://192.168.178.110:5500",
                 "https://task-frontend-rho-vert.vercel.app"
         ));
 

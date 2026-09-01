@@ -3,6 +3,7 @@ package de.louis.task_api.controller;
 import de.louis.task_api.model.LoginRequest;
 import de.louis.task_api.model.RegisterRequest;
 import de.louis.task_api.model.User;
+import de.louis.task_api.model.UserResponse;
 import de.louis.task_api.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,6 +32,8 @@ public class AuthController {
         this.securityContextRepository=securityContextRepository;
     }
 
+
+
     @GetMapping("/me")
     public ResponseEntity<String> me(Authentication authentication) {
         return ResponseEntity.ok(authentication.getName());
@@ -38,12 +41,16 @@ public class AuthController {
 
     @PostMapping("/register")
 
-    public User register(@RequestBody RegisterRequest request) {
-        return userService.register(
+    public UserResponse register(@RequestBody RegisterRequest request) {
+        User user = userService.register(
                 request.username(),
                 request.password()
         );
 
+        return new UserResponse(
+                user.getId(),
+                user.getUsername()
+        );
     }
 
     @PostMapping("/login")

@@ -13,12 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = {
-        "http://localhost:5500",
-        "http://127.0.0.1:5500",
-        "http://192.168.178.110:5500",
-        "https://task-frontend-rho-vert.vercel.app"
-})
+
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
