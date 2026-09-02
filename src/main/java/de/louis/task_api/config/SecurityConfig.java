@@ -44,7 +44,11 @@ public class SecurityConfig {
                                 "/auth/register",
                                 "/auth/login",
                                 "/csrf",
-                                "/error"
+                                "/error",
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs",
+                                "/v3/api-docs/**"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
